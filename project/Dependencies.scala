@@ -11,7 +11,8 @@ object Dependencies {
   def provided  (deps: ModuleID*): Seq[ModuleID] = deps map (_ % "provided")
   def test      (deps: ModuleID*): Seq[ModuleID] = deps map (_ % "test")
   def runtime   (deps: ModuleID*): Seq[ModuleID] = deps map (_ % "runtime")
-  def container (deps: ModuleID*): Seq[ModuleID] = deps map (_ % "container")
+  // change to compile scope for now because we removed sbt's web plugin
+  def container (deps: ModuleID*): Seq[ModuleID] = deps map (_ % "compile")
 
   val scalaReflect  = "org.scala-lang"                          %   "scala-reflect"               % "2.10.3"
   val akkaActor     = "com.typesafe.akka"                       %%  "akka-osgi"                   % "2.3.0-RC1"
