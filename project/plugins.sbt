@@ -6,11 +6,7 @@ libraryDependencies ++= Seq(
   "com.jcraft" % "jzlib" % "1.1.1"
 )
 
-addSbtPlugin("io.spray" % "sbt-revolver" % "0.7.1")
-
 addSbtPlugin("io.spray" % "sbt-boilerplate" % "0.5.1")
-
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.10.2")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.2.1")
 

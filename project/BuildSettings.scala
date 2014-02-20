@@ -2,9 +2,6 @@ import sbt._
 import Keys._
 import com.typesafe.sbt.SbtScalariform
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-import sbtassembly.Plugin.AssemblyKeys._
-import sbtassembly.Plugin._
-import spray.revolver.RevolverPlugin.Revolver
 import com.typesafe.sbt.osgi.SbtOsgi
 import SbtOsgi._
 
@@ -83,14 +80,9 @@ object BuildSettings {
   )
 
   lazy val exampleSettings = basicSettings ++ noPublishing
-  lazy val standaloneServerExampleSettings = exampleSettings ++ Revolver.settings
+  lazy val standaloneServerExampleSettings = exampleSettings
 
-  lazy val benchmarkSettings = basicSettings ++ noPublishing ++ Revolver.settings ++ assemblySettings ++ Seq(
-    mainClass in assembly := Some("spray.examples.Main"),
-    jarName in assembly := "benchmark.jar",
-    test in assembly := {},
-    javaOptions in Revolver.reStart ++= Seq("-verbose:gc", "-XX:+PrintCompilation")
-  )
+  lazy val benchmarkSettings = basicSettings ++ noPublishing
 
   lazy val jettyExampleSettings = exampleSettings // ++ disableJettyLogSettings
 
