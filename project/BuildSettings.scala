@@ -101,10 +101,25 @@ object BuildSettings {
     unmanagedSourceDirectories in Test <<= baseDirectory { _ ** "code" get }
   )
 
-  lazy val exampleSettings = basicSettings ++ noPublishing
+  /*
+   * Add scala-xml dependency when needed (for Scala 2.11 and newer) in a robust way
+   * This mechanism supports cross-version publishing
+   */
+  private val scalaXmlModule: Setting[Seq[sbt.ModuleID]] = libraryDependencies := {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      // if scala 2.11+ is used, add dependency on scala-xml module
+      case Some((2, scalaMajor)) if scalaMajor >= 11 =>
+        libraryDependencies.value :+ "org.scala-lang.modules" %% "scala-xml" % "1.0.0"
+      case _ =>
+        libraryDependencies.value
+    }
+  }
+
+  lazy val exampleSettings = basicSettings ++ noPublishing ++ seq(scalaXmlModule)
   lazy val standaloneServerExampleSettings = exampleSettings ++ Revolver.settings
 
   lazy val benchmarkSettings = basicSettings ++ noPublishing ++ Revolver.settings ++ assemblySettings ++ Seq(
+    scalaXmlModule,
     mainClass in assembly := Some("spray.examples.Main"),
     jarName in assembly := "benchmark.jar",
     test in assembly := {},
