@@ -84,7 +84,9 @@ object BuildSettings {
   )
   lazy val standaloneServerExampleSettings = exampleSettings
 
-  lazy val benchmarkSettings = basicSettings ++ noPublishing
+  lazy val benchmarkSettings = basicSettings ++ noPublishing ++ seq(
+    libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.0.0-RC7"
+  )
 
   lazy val jettyExampleSettings = exampleSettings // ++ disableJettyLogSettings
 
