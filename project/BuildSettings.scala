@@ -36,7 +36,6 @@ object BuildSettings {
   lazy val sprayModuleSettings =
     basicSettings ++ formatSettings ++
     NightlyBuildSupport.settings ++
-    net.virtualvoid.sbt.graph.Plugin.graphSettings ++
     seq(
       // scaladoc settings
       (scalacOptions in doc) <++= (name, version).map { (n, v) => Seq("-doc-title", n, "-doc-version", v) },
