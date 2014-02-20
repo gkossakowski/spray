@@ -79,7 +79,9 @@ object BuildSettings {
     unmanagedSourceDirectories in Test <<= baseDirectory { _ ** "code" get }
   )
 
-  lazy val exampleSettings = basicSettings ++ noPublishing
+  lazy val exampleSettings = basicSettings ++ noPublishing ++ seq(
+    libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.0.0-RC7"
+  )
   lazy val standaloneServerExampleSettings = exampleSettings
 
   lazy val benchmarkSettings = basicSettings ++ noPublishing
