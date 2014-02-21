@@ -20,6 +20,9 @@ package directives
 import java.lang.IllegalStateException
 import shapeless._
 
+import shapeless.ops.hlist.LeftFolder
+import shapeless.ops.hlist.Prepend
+
 trait ParameterDirectives extends ToNameReceptaclePimps {
 
   /**
@@ -133,8 +136,8 @@ object ParamDefMagnet2 {
 
   /************ tuple support ******************/
 
-  implicit def forTuple[T <: Product, L <: HList, Out0](implicit hla: HListerAux[T, L], pdma: ParamDefMagnetAux[L, Out0]) =
-    ParamDefMagnetAux[T, Out0](tuple ⇒ pdma(hla(tuple)))
+  implicit def forTuple[T <: Product, L <: HList, Out0](implicit hla: Generic.Aux[T, L], pdma: ParamDefMagnetAux[L, Out0]) =
+    ParamDefMagnetAux[T, Out0](tuple ⇒ pdma(hla.to(tuple)))
 
   /************ HList support ******************/
 
@@ -142,7 +145,7 @@ object ParamDefMagnet2 {
     ParamDefMagnetAux[L, f.Out](_.foldLeft(BasicDirectives.noop)(MapReduce))
 
   object MapReduce extends Poly2 {
-    implicit def from[T, LA <: HList, LB <: HList, Out <: HList](implicit pdma: ParamDefMagnetAux[T, Directive[LB]], ev: PrependAux[LA, LB, Out]) =
+    implicit def from[T, LA <: HList, LB <: HList, Out <: HList](implicit pdma: ParamDefMagnetAux[T, Directive[LB]], ev: Prepend.Aux[LA, LB, Out]) =
       at[Directive[LA], T] { (a, t) ⇒ a & pdma(t) }
   }
 }
