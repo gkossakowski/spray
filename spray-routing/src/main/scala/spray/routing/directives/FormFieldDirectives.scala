@@ -19,6 +19,8 @@ package directives
 
 import shapeless._
 import spray.http._
+import shapeless.ops.hlist.LeftFolder
+import shapeless.ops.hlist.Prepend
 
 trait FormFieldDirectives extends ToNameReceptaclePimps {
 
@@ -108,8 +110,8 @@ object FieldDefMagnet2 extends ToNameReceptaclePimps {
 
   /************ tuple support ******************/
 
-  implicit def forTuple[T <: Product, L <: HList, Out0](implicit hla: HListerAux[T, L], fdma: FieldDefMagnetAux[L, Out0]) =
-    FieldDefMagnetAux[T, Out0](tuple ⇒ fdma(hla(tuple)))
+  implicit def forTuple[T <: Product, L <: HList, Out0](implicit hla: Generic.Aux[T, L], fdma: FieldDefMagnetAux[L, Out0]) =
+    FieldDefMagnetAux[T, Out0](tuple ⇒ fdma(hla.to(tuple)))
 
   /************ HList support ******************/
 
@@ -117,7 +119,7 @@ object FieldDefMagnet2 extends ToNameReceptaclePimps {
     FieldDefMagnetAux[L, f.Out](_.foldLeft(BasicDirectives.noop)(MapReduce))
 
   object MapReduce extends Poly2 {
-    implicit def from[T, LA <: HList, LB <: HList, Out <: HList](implicit fdma: FieldDefMagnetAux[T, Directive[LB]], ev: PrependAux[LA, LB, Out]) =
+    implicit def from[T, LA <: HList, LB <: HList, Out <: HList](implicit fdma: FieldDefMagnetAux[T, Directive[LB]], ev: Prepend.Aux[LA, LB, Out]) =
       at[Directive[LA], T] { (a, t) ⇒ a & fdma(t) }
   }
 }
